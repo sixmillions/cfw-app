@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { bearerAuth } from 'hono/bearer-auth'
-import { serveStatic } from 'hono/cloudflare-workers';
+import { serveStatic } from 'hono/cloudflare-workers'
 import { Env, UploadBody } from '../model'
 import { S3Client } from '@aws-sdk/client-s3'
 import { listBucket, createBucket, deleteBucket } from './bucket'
@@ -28,7 +28,6 @@ app.get('/docs', serveStatic({ path: './s3/swagger-ui.html' }))
 app.get('/openapi.json', serveStatic({ path: './s3/openapi.json' }))
 
 /**
- * TODO
  * Bucket Api
  */
 app
@@ -57,8 +56,7 @@ app
   })
 
 /**
- * TODO
- * Object
+ * Object Api
  */
 app
   .get('obj/:bucket', async (c) => {

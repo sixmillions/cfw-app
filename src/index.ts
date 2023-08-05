@@ -1,5 +1,5 @@
 import { Hono } from 'hono'
-import { cors } from 'hono/cors';
+import { cors } from 'hono/cors'
 import { serveStatic } from 'hono/cloudflare-workers'
 import s3App from './s3'
 
