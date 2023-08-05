@@ -1,5 +1,4 @@
 import { Hono } from 'hono'
-import { cors } from 'hono/cors'
 import { bearerAuth } from 'hono/bearer-auth'
 import { serveStatic } from 'hono/cloudflare-workers';
 import { Env, UploadBody } from '../model'
@@ -21,8 +20,6 @@ app.use('*', async (c, next) => {
   } else {
     await next()
   }
-  // 允许跨域
-  cors()
 })
 
 // Swagger
