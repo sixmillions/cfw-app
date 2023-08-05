@@ -2,7 +2,7 @@ name = "cfw-app"
 main = "src/index.ts"
 compatibility_date = "2023-07-24"
 
-# 不允许CF追钟记录
+# 不允许CF追踪记录
 send_metrics = false
 
 # Variable bindings. These are arbitrary, plaintext strings (similar to environment variables)
