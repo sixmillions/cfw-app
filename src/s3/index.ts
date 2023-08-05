@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { Env } from '../model'
 import { S3Client } from '@aws-sdk/client-s3'
+import { listBucket, createBucket, deleteBucket } from './bucket'
 
 const app = new Hono<{ Bindings: Env }>()
 
@@ -21,13 +22,27 @@ app.get('/', (c) => c.text('S3 OSS Page'))
  */
 app
   .get('bucket', async (c) => {
-    return c.text('Bucket List')
+    if (client == null) {
+      return c.json({ isSuccess: false, msg: 'client not init.' })
+    }
+    const bucketList = await listBucket(client)
+    return c.json(bucketList)
   })
   .post(async (c) => {
-    return c.text('Bucket Create')
+    if (client == null) {
+      return c.json({ isSuccess: false, msg: 'client not init.' })
+    }
+    const bucket: { name: string } = await c.req.json()
+    const isSuccess = await createBucket(client, bucket.name)
+    return c.json({ isSuccess })
   })
-  .post(async (c) => {
-    return c.text('Bucket Delete')
+  .delete(async (c) => {
+    if (client == null) {
+      return c.json({ isSuccess: false, msg: 'client not init.' })
+    }
+    const bucket: { name: string } = await c.req.json()
+    const isSuccess = await deleteBucket(client, bucket.name)
+    return c.json({ isSuccess })
   })
 
 /**
