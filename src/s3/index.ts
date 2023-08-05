@@ -1,4 +1,6 @@
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
+import { bearerAuth } from 'hono/bearer-auth'
 import { Env, UploadBody } from '../model'
 import { S3Client } from '@aws-sdk/client-s3'
 import { listBucket, createBucket, deleteBucket } from './bucket'
@@ -12,7 +14,14 @@ let client: S3Client | null = null
 app.use('*', async (c, next) => {
   // init client
   client = s3Client(c.env)
-  await next()
+  if (c.req.method !== 'GET') {
+    const auth = bearerAuth({ token: c.env.TOKEN })
+    return auth(c, next)
+  } else {
+    await next()
+  }
+  // 允许跨域
+  cors()
 })
 
 // TODO Swagger
@@ -76,7 +85,7 @@ app
     await uploadObject(client, bucket, _fullName, file)
     return c.json({ url: `${c.env.ENDPOINT}/${bucket}/${_fullName}` })
   })
-  .post(async (c) => {
+  .delete(async (c) => {
     if (client == null) {
       return c.json({ isSuccess: false, msg: 'client not init.' })
     }
@@ -84,7 +93,6 @@ app
     const ossObj: { name: string } = await c.req.json()
     const isSuccess = await deleteObject(client, bucket, ossObj.name)
     return c.json({ isSuccess })
-    return c.text('Object Delete')
   })
 
 const s3Client = function (env: Env): S3Client {

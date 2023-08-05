@@ -4,3 +4,4 @@ ENDPOINT=https://xxxx
 REGION=xxx
 ACCESS_KEY_ID=xxx
 SECRET_ACCESS_KEY=xxx
+TOKEN=xxx
