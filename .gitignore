@@ -1,0 +1,12 @@
+node_modules
+serverless.yml
+*.log
+*.log*
+worker
+dist
+.cache
+.output
+.env
+.dev.vars
+.vscode
+.wrangler
