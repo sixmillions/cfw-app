@@ -2,6 +2,14 @@
   "name": "cfw-app",
   "version": "0.0.0",
   "private": true,
+  "description": "Cloudflare Workers APP",
+	"author": "six",
+	"license": "ISC",
+	"keywords": [
+		"cloudflare workers",
+		"CF",
+    "cloudflare"
+	],
   "scripts": {
     "format": "prettier --write '**/*.{js,ts,css,json,md,html}'",
     "deploy": "wrangler deploy",
