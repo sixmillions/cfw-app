@@ -1,0 +1,6 @@
+# 本地开发使用的时候，重命名为 .dev.var，然后修改为实际值
+# 本地运行时，这里的值会覆盖 wrangler.toml 中的 [vars]
+ENDPOINT=https://xxxx
+REGION=xxx
+ACCESS_KEY_ID=xxx
+SECRET_ACCESS_KEY=xxx
