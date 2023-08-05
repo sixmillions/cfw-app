@@ -1,0 +1,395 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "S3 OSS - OpenAPI 3.0",
+    "description": "Upload files to OSS through the s3 protocol",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "name": "sixmillions",
+      "url:": "https://sixmillions.cn",
+      "email": "liubw95@163.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "0.0.1"
+  },
+  "externalDocs": {
+    "description": "Find out more about this project",
+    "url": "https://github.com/sixmillions/cfw-app"
+  },
+  "tags": [
+    {
+      "name": "Object",
+      "description": "CRUD of Object",
+      "externalDocs": {
+        "description": "Find out more about Object",
+        "url": "https://docs.amazonaws.cn/en_us/AmazonS3/latest/userguide/example_s3_PutObject_section.html"
+      }
+    },
+    {
+      "name": "Bucket",
+      "description": "Everything about your Bucket",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "https://docs.amazonaws.cn/en_us/AmazonS3/latest/userguide/example_s3_CreateBucket_section.html"
+      }
+    }
+  ],
+  "paths": {
+    "/s3/bucket": {
+      "get": {
+        "tags": ["Bucket"],
+        "summary": "List Buckets",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Owner": {
+                      "type": "object",
+                      "properties": {
+                        "DisplayName": {
+                          "type": "string",
+                          "example": "minio"
+                        },
+                        "ID": {
+                          "type": "string",
+                          "example": "xxxxxxx"
+                        }
+                      },
+                      "required": ["DisplayName", "ID"]
+                    },
+                    "Buckets": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "Name": {
+                            "type": "string",
+                            "example": "image"
+                          },
+                          "CreationDate": {
+                            "type": "string",
+                            "example": "2022-09-15",
+                            "format": "date"
+                          }
+                        },
+                        "required": ["Name", "CreationDate"]
+                      }
+                    }
+                  },
+                  "required": ["Owner", "Buckets"]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get_BucketList",
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Bucket"],
+        "summary": "Create a new Bucket",
+        "description": "Create a new Bucket",
+        "operationId": "createBucket",
+        "requestBody": {
+          "description": "Create a new bucket in the OSS.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BucketName"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessRes"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Bucket"],
+        "summary": "Delete a Empty Bucket",
+        "requestBody": {
+          "description": "bucket name.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BucketName"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["isSuccess"]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "delete_BucketDelete",
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ]
+      }
+    },
+    "/s3/obj/{bucket}": {
+      "get": {
+        "tags": ["Object"],
+        "summary": "List Object",
+        "parameters": [
+          {
+            "description": "Bucket Name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Bucket Name"
+            },
+            "name": "bucket",
+            "in": "path"
+          },
+          {
+            "description": "Limit number",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Limit number",
+              "default": 10
+            },
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Key": {
+                        "type": "string",
+                        "example": "logo/logo.png"
+                      },
+                      "LastModified": {
+                        "type": "string",
+                        "example": "2022-09-15T00:00:00Z",
+                        "format": "date-time"
+                      },
+                      "ETag": {
+                        "type": "string",
+                        "example": "\"90fec7376658b93bda08a934b0382a84\""
+                      },
+                      "Size": {
+                        "type": "integer"
+                      },
+                      "StorageClass": {
+                        "type": "string",
+                        "example": "STANDARD"
+                      }
+                    },
+                    "required": ["Key", "LastModified", "ETag", "Size", "StorageClass"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get_ObjectList"
+      },
+      "post": {
+        "tags": ["Object"],
+        "summary": "uploads an object",
+        "description": "",
+        "operationId": "uploadObject",
+        "parameters": [
+          {
+            "name": "bucket",
+            "in": "path",
+            "description": "bucket name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "image"
+            }
+          },
+          {
+            "name": "fullName",
+            "in": "formData",
+            "description": "文件名",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "example": "https://s.sixmillions.cn/img/logo/logo.png"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Object"],
+        "summary": "Delete a Object",
+        "parameters": [
+          {
+            "name": "bucket",
+            "in": "path",
+            "description": "bucket name",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "image"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Object fullname",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ObjectName"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["isSuccess"]
+                }
+              }
+            }
+          }
+        },
+        "operationId": "delete_BucketDelete",
+        "security": [
+          {
+            "tokenAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BucketName": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Bucket Name",
+            "example": "ddd"
+          }
+        },
+        "required": ["name"]
+      },
+      "ObjectName": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Object fullName",
+            "example": "2023/08/05/101255213.png"
+          }
+        },
+        "required": ["name"]
+      },
+      "SuccessRes": {
+        "type": "object",
+        "properties": {
+          "isSuccess": {
+            "type": "boolean"
+          }
+        },
+        "required": ["isSuccess"]
+      }
+    },
+    "securitySchemes": {
+      "tokenAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

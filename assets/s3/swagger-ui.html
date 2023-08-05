@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="SwaggerUI" />
+    <title>S3 OSS Swagger</title>
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.3.0/swagger-ui.css" />
+  </head>
+
+  <body>
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5.3.0/swagger-ui-bundle.js" crossorigin></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.3.0/swagger-ui-standalone-preset.js" crossorigin></script>
+    <script>
+      var url = window.location.href
+      var base = new URL(url).origin
+      window.onload = () => {
+        window.ui = SwaggerUIBundle({
+          url: base + '/s3/openapi.json',
+          dom_id: '#swagger-ui', // 指定 Swagger UI 将要渲染的 HTML 元素的 ID
+          presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+          layout: 'StandaloneLayout',
+        })
+      }
+    </script>
+  </body>
+</html>

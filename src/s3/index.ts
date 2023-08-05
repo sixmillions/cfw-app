@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { bearerAuth } from 'hono/bearer-auth'
+import { serveStatic } from 'hono/cloudflare-workers';
 import { Env, UploadBody } from '../model'
 import { S3Client } from '@aws-sdk/client-s3'
 import { listBucket, createBucket, deleteBucket } from './bucket'
@@ -24,8 +25,10 @@ app.use('*', async (c, next) => {
   cors()
 })
 
-// TODO Swagger
-app.get('/', (c) => c.text('S3 OSS Page'))
+// Swagger
+app.get('/', (c) => c.redirect('/s3/docs'))
+app.get('/docs', serveStatic({ path: './s3/swagger-ui.html' }))
+app.get('/openapi.json', serveStatic({ path: './s3/openapi.json' }))
 
 /**
  * TODO
