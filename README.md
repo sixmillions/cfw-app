@@ -37,3 +37,9 @@ npm run deploy
 - dom_id（必需）：用于容纳 Swagger UI 的 DOM 元素的 ID。
 - url（必需）：Swagger API 定义文件的 URL。可以是远程 URL 或本地文件路径。
 - spec：一个包含 Swagger API 定义的 JavaScript 对象。如果提供了 spec 参数，则会忽略 url 参数。
+
+## DB
+
+> https://developers.cloudflare.com/workers/tutorials/postgres#using-a-connection-string
+
+> https://node-postgres.com/features/connecting

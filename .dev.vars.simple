@@ -5,3 +5,4 @@ REGION=xxx
 ACCESS_KEY_ID=xxx
 SECRET_ACCESS_KEY=xxx
 TOKEN=xxx
+DB_URL=postgresql://username:password@host:port/database

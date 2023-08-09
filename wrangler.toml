@@ -5,6 +5,9 @@ compatibility_date = "2023-07-24"
 # 不允许CF追踪记录
 send_metrics = false
 
+# 使用node打包
+node_compat = true
+
 # 静态文件处理
 [site]
 bucket = "./assets"
